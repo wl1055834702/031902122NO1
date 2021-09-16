@@ -112,7 +112,7 @@ if __name__ == "__main__":
     elif len(sys.argv) == 4:
         path_words=str(sys.argv[1])
         path_org=str(sys.argv[2])
-        path_ans=str[sys.argv[3]]
+        path_ans=str(sys.argv[3])
     else:
         print("wrong")
     mgc = buildmgck(path_words)
