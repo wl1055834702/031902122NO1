@@ -1,10 +1,18 @@
 import sys
 from pypinyin import pinyin, lazy_pinyin, Style, load_phrases_dict, load_single_dict
 import pypinyin
-from wenbenpinyinhua import *
 import copy
 match_list = []     # 记录找出来的敏感词
 total = 0           # 记录敏感词数量
+def hang(line,i):
+    str=''
+    h_list={}
+    for py in lazy_pinyin(line,style=Style.FIRST_LETTER):
+        str+=py.lower()
+    for t,s in enumerate(str,start=1):
+        if s>'a' and s<'z' or s=='a' or s=='z':
+            h_list[t]=s
+    return h_list
 def mgccf(a, b) -> list:  # 构建敏感词库       #自定义的列表相乘函数，用于组合拼音
     c_list = [a[0][0], b[0]]
     length = len(a)
@@ -100,7 +108,6 @@ class DFA:            #用dfa算法寻找敏感词
                     current_dict = next_dict
                 if index == length - 1:
                     current_dict["is_end"] = True
-
         return state_event_dict
 
 if __name__ == "__main__":
@@ -128,4 +135,5 @@ theans = open(path_ans, 'w', encoding='utf-8')
 theans.write(f"total:{total}\n")
 for value in match_list:
     theans.write(f'{value}\n')
+
 
