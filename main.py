@@ -1,6 +1,4 @@
-# 伍浪
-# 加油冲冲冲
-# 时间：2021/9/13 20:34
+import sys
 from pypinyin import pinyin, lazy_pinyin, Style, load_phrases_dict, load_single_dict
 import pypinyin
 from wenbenpinyinhua import *
@@ -22,10 +20,18 @@ def mgccf(a, b) -> list:  # 构建敏感词库       #自定义的列表相乘�
         c_list = mgc_list
         i += 1
     return mgc_list
-
-def buildmgck(filename):               #将汉字都变成拼音，构建各种组合与敏感词相对应的敏感词库，eg：‘flg’：‘法轮功’
+def try_file_path(file_path):
+    try:
+        f = open(file_path, encoding='utf-8')
+    except Exception as msg:
+        print(msg)
+        exit(0)
+    else:
+        f.close()
+def buildmgck(filepath):               #将汉字都变成拼音，构建各种组合与敏感词相对应的敏感词库，eg：‘flg’：‘法轮功’
+    try_file_path(filepath)
     mgc={}
-    with open(filename, 'r', encoding='utf_8') as file_object:
+    with open(filepath, 'r', encoding='utf_8') as file_object:
         py = []
         for line in file_object:
             if line.rstrip() == lazy_pinyin(line.rstrip())[0]:     #单词变小写，加入敏感词库
@@ -97,18 +103,29 @@ class DFA:            #用dfa算法寻找敏感词
 
         return state_event_dict
 
-
 if __name__ == "__main__":
-    mgc=buildmgck('words.txt')
+    mgcflie=checkfile=ansfile=''
+    if len(sys.argv) == 1:
+        path_words = "words.txt"
+        path_org = "org.txt"
+        path_ans = "ans.txt"
+    elif len(sys.argv) == 4:
+        path_words=str(sys.argv[1])
+        path_org=str(sys.argv[2])
+        path_ans=str[sys.argv[3]]
+    else:
+        print("wrong")
+    mgc = buildmgck(path_words)
     dfa = DFA(mgc)
     txtnum = 1
     # 记录行数
-    with open("org.txt", 'r', encoding='utf-8') as cstxt:
+    with open(path_org, 'r' , encoding='utf-8') as cstxt:
         # 一行一行的处理，查找敏感词
         for line in cstxt:
             dfa.match(line, txtnum)
             txtnum += 1
-myans = open('myans.txt', 'w', encoding='utf-8')
-myans.write(f"total:{total}\n")
+theans = open(path_ans, 'w', encoding='utf-8')
+theans.write(f"total:{total}\n")
 for value in match_list:
-    myans.write(f'{value}\n')
+    theans.write(f'{value}\n')
+
