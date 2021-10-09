@@ -77,7 +77,7 @@ class DFA:            #用dfa算法寻找敏感词
                         if 1 < 2:
                             mgc_value = content[start - 1:end]
                             premgc = mgc[temp_match_list[index]["match"]]
-                            match_list.append(f"line{txtnum}<{premgc}>:{mgc_value}")
+                            match_list.append(f"line{txtnum}: <{premgc}> {mgc_value}")
                             global total
                             total = total + 1  # 找出的值
                             if len(state[char].keys()) == 1:
@@ -132,7 +132,7 @@ if __name__ == "__main__":
             dfa.match(line, txtnum)
             txtnum += 1
 theans = open(path_ans, 'w', encoding='utf-8')
-theans.write(f"total:{total}\n")
+theans.write(f"total: {total}\n")
 for value in match_list:
     theans.write(f'{value}\n')
 
